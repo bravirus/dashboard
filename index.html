@@ -15,16 +15,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .live-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.1);color:var(--green);font-size:.75rem;font-weight:600;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
 .live-badge::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.setup{max-width:500px;margin:2rem auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center}
-.setup h2{font-size:1.2rem;margin-bottom:1rem}
-.setup p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
-.setup input{width:100%;padding:.8rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;margin-bottom:1rem;font-family:monospace}
-.setup input:focus{outline:none;border-color:var(--blue)}
-.btn{display:inline-block;background:var(--blue);color:#fff;font-size:.9rem;font-weight:700;padding:.8rem 2rem;border-radius:10px;border:none;cursor:pointer;transition:all .2s}
-.btn:hover{opacity:.9;transform:translateY(-1px)}
-.steps{text-align:left;margin:1rem 0}
-.steps li{font-size:.82rem;color:var(--muted);margin-bottom:.5rem;line-height:1.5}
-.steps code{background:var(--bg);padding:.15rem .4rem;border-radius:4px;font-size:.78rem;color:var(--cyan)}
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .sum-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;text-align:center}
 .sum-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem}
@@ -42,10 +32,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .d-stat{background:var(--bg);border-radius:10px;padding:.8rem;text-align:center}
 .d-stat-value{font-size:1.2rem;font-weight:800;margin-bottom:.2rem}
 .d-stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
-.loading{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+.loading-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .refresh-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
 .refresh-bar .last-update{font-size:.75rem;color:var(--muted)}
+.btn{display:inline-block;background:var(--blue);color:#fff;font-size:.78rem;font-weight:700;padding:.5rem 1rem;border-radius:10px;border:none;cursor:pointer}
 .chart-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:2rem}
 .chart-title{font-size:.9rem;font-weight:700;margin-bottom:1rem}
 .bar-chart{display:flex;align-items:flex-end;gap:.6rem;height:160px}
@@ -55,10 +46,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .bar-value{font-size:.68rem;font-weight:700}
 .no-data{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-top:1rem}
 .no-data .icon{font-size:2.5rem;margin-bottom:.8rem}
-.disconnect{font-size:.72rem;color:var(--red);cursor:pointer;text-decoration:underline;margin-top:1rem;display:inline-block}
+.status-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin:1rem 0;font-size:.78rem;color:var(--muted);font-family:monospace;white-space:pre-wrap;word-break:break-all;max-height:150px;overflow:auto}
 .footer{text-align:center;margin-top:2rem;font-size:.75rem;color:var(--muted)}
 .footer a{color:var(--blue);text-decoration:none}
-.hidden{display:none}
 @media(max-width:768px){.summary{grid-template-columns:1fr 1fr}.d-stats{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.summary{grid-template-columns:1fr}}
 </style>
@@ -67,135 +57,178 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="header">
   <h1>📊 Domain Portfolio</h1>
   <p>Live Dashboard — Analytics & Performance</p>
-  <div class="live-badge" id="statusBadge">Connecting...</div>
+  <div class="live-badge" id="statusBadge"><span class="loading-spin"></span> Loading...</div>
 </div>
 
-<div class="setup" id="setupPanel">
-  <h2>🔑 Connect GoatCounter</h2>
-  <p>Bach tchouf les analytics en direct, khasek API token dyal GoatCounter.</p>
-  <ol class="steps">
-    <li>Sir l <a href="https://bravirus.goatcounter.com/settings/auth/" target="_blank" style="color:var(--blue)">bravirus.goatcounter.com/settings/auth</a></li>
-    <li>Click <code>New token</code></li>
-    <li>Copié le token o colih hna 👇</li>
-  </ol>
-  <input type="text" id="tokenInput" placeholder="Paste your API token here...">
-  <br>
-  <button class="btn" onclick="saveToken()">Connect ✅</button>
-  <p style="font-size:.72rem;color:var(--muted);margin-top:1rem">🔒 Le token kaytstoré ghir f navigateur dyalek.</p>
+<div class="refresh-bar">
+  <span class="last-update" id="lastUpdate">Loading data...</span>
+  <button class="btn" onclick="fetchAllData()">🔄 Refresh</button>
 </div>
 
-<div id="mainDashboard" class="hidden">
-  <div class="refresh-bar">
-    <span class="last-update" id="lastUpdate">Last update: —</span>
-    <div>
-      <button class="btn" onclick="fetchAllData()" style="font-size:.78rem;padding:.5rem 1rem">🔄 Refresh</button>
-      <span class="disconnect" onclick="disconnectToken()">Disconnect</span>
-    </div>
-  </div>
-  <div class="summary">
-    <div class="sum-card"><div class="sum-label">Total Visits</div><div class="sum-value" style="color:var(--blue)" id="totalVisits">—</div><div class="sum-sub">All domains</div></div>
-    <div class="sum-card"><div class="sum-label">Buy Clicks</div><div class="sum-value" style="color:var(--green)" id="totalClicks">—</div><div class="sum-sub">All domains</div></div>
-    <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" style="color:var(--amber)">$21,600</div><div class="sum-sub">8 domains</div></div>
-    <div class="sum-card"><div class="sum-label">Conversion Rate</div><div class="sum-value" style="color:var(--cyan)" id="convRate">—</div><div class="sum-sub">Clicks / Visits</div></div>
-  </div>
-  <div class="chart-section">
-    <div class="chart-title">📈 Visits by Domain</div>
-    <div class="bar-chart" id="visitsChart"></div>
-  </div>
-  <h2 style="font-size:1.2rem;font-weight:800;margin:1.5rem 0 1rem">🌐 Domain Details</h2>
-  <div class="domains" id="domainCards"></div>
+<div class="summary">
+  <div class="sum-card"><div class="sum-label">Total Visits</div><div class="sum-value" style="color:var(--blue)" id="totalVisits">—</div><div class="sum-sub">All domains</div></div>
+  <div class="sum-card"><div class="sum-label">Buy Clicks</div><div class="sum-value" style="color:var(--green)" id="totalClicks">—</div><div class="sum-sub">All domains</div></div>
+  <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" style="color:var(--amber)">$21,600</div><div class="sum-sub">8 domains</div></div>
+  <div class="sum-card"><div class="sum-label">Conversion Rate</div><div class="sum-value" style="color:var(--cyan)" id="convRate">—</div><div class="sum-sub">Clicks / Visits</div></div>
 </div>
+
+<div class="chart-section">
+  <div class="chart-title">📈 Visits by Domain</div>
+  <div class="bar-chart" id="visitsChart"></div>
+</div>
+
+<h2 style="font-size:1.2rem;font-weight:800;margin:1.5rem 0 1rem">🌐 Domain Details</h2>
+<div class="domains" id="domainCards"></div>
+
+<div class="status-box" id="statusLog">Connecting to GoatCounter...</div>
 
 <div class="footer">Powered by <a href="https://bravirus.goatcounter.com" target="_blank">GoatCounter</a> &middot; Auto-refresh every 60s</div>
 
 <script>
-const GC='bravirus.goatcounter.com';
-const domains=[
-  {name:"seattledietfoods.com",slug:"seattledietfoods",price:"$1,500",color:"#10b981",type:"Geo-Niche"},
-  {name:"ottawadietdirect.com",slug:"ottawadietdirect",price:"$1,500",color:"#10b981",type:"Geo-Niche"},
-  {name:"divingontario.com",slug:"divingontario",price:"$1,500",color:"#06b6d4",type:"Geo-Niche"},
-  {name:"santof.com",slug:"santof",price:"$1,800",color:"#8b5cf6",type:"Brandable"},
-  {name:"iddic.com",slug:"iddic",price:"$2,000",color:"#3b82f6",type:"Brandable"},
-  {name:"cvcas.com",slug:"cvcas",price:"—",color:"#3b82f6",type:"Brandable"},
-  {name:"PromptBootAI.com",slug:"promptbootai",price:"$3,000",color:"#f59e0b",type:"AI/Trending"},
-  {name:"Hetod.com",slug:"hetod",price:"$10,000",color:"#ef4444",type:"Premium"}
+const GC = 'bravirus.goatcounter.com';
+const TOKEN = 'l1ir4nzgw9qmyp95z77x41g1rg9rnbtr5vx71n77f0thupnm1';
+
+const domains = [
+  {name:"seattledietfoods.com", slug:"seattledietfoods", price:"$1,500", color:"#10b981", type:"Geo-Niche"},
+  {name:"ottawadietdirect.com", slug:"ottawadietdirect", price:"$1,500", color:"#10b981", type:"Geo-Niche"},
+  {name:"divingontario.com", slug:"divingontario", price:"$1,500", color:"#06b6d4", type:"Geo-Niche"},
+  {name:"santof.com", slug:"santof", price:"$1,800", color:"#8b5cf6", type:"Brandable"},
+  {name:"iddic.com", slug:"iddic", price:"$2,000", color:"#3b82f6", type:"Brandable"},
+  {name:"cvcas.com", slug:"cvcas", price:"—", color:"#3b82f6", type:"Brandable"},
+  {name:"PromptBootAI.com", slug:"promptbootai", price:"$3,000", color:"#f59e0b", type:"AI/Trending"},
+  {name:"Hetod.com", slug:"hetod", price:"$10,000", color:"#ef4444", type:"Premium"}
 ];
 
-function saveToken(){
-  const t=document.getElementById('tokenInput').value.trim();
-  if(!t)return alert('Paste your API token!');
-  try{localStorage.setItem('gc_token',t)}catch(e){}
-  showDashboard();
-}
-function getToken(){try{return localStorage.getItem('gc_token')}catch(e){return null}}
-function disconnectToken(){try{localStorage.removeItem('gc_token')}catch(e){}location.reload()}
-
-function showDashboard(){
-  document.getElementById('setupPanel').classList.add('hidden');
-  document.getElementById('mainDashboard').classList.remove('hidden');
-  fetchAllData();
+let log = '';
+function addLog(msg) {
+  log += new Date().toLocaleTimeString() + ' → ' + msg + '\n';
+  document.getElementById('statusLog').textContent = log;
 }
 
-async function fetchGC(ep){
-  const t=getToken();if(!t)return null;
-  try{
-    const r=await fetch('https://'+GC+'/api/v0'+ep,{headers:{'Authorization':'Bearer '+t,'Content-Type':'application/json'}});
-    if(!r.ok){if(r.status===403){alert('Token invalide!');disconnectToken()}return null}
-    return await r.json();
-  }catch(e){console.error(e);return null}
+async function tryFetch(endpoint) {
+  const url = 'https://' + GC + '/api/v0' + endpoint;
+  addLog('Fetching: ' + url);
+  try {
+    const resp = await fetch(url, {
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN,
+        'Content-Type': 'application/json'
+      }
+    });
+    addLog('Response status: ' + resp.status);
+    if (!resp.ok) {
+      const errText = await resp.text();
+      addLog('Error body: ' + errText.substring(0, 200));
+      return null;
+    }
+    const data = await resp.json();
+    addLog('Success! Keys: ' + Object.keys(data).join(', '));
+    return data;
+  } catch(e) {
+    addLog('Error: ' + e.message);
+    return null;
+  }
 }
 
-async function fetchAllData(){
-  document.getElementById('statusBadge').innerHTML='<span class="loading"></span> Fetching...';
-  const stats=await fetchGC('/stats/hits?limit=100');
-  let tv=0,tc=0,tcc=0;
-  let dv={},dc={},dcc={};
-  domains.forEach(d=>{dv[d.slug]=0;dc[d.slug]=0;dcc[d.slug]=0});
+async function fetchAllData() {
+  log = '';
+  document.getElementById('statusBadge').innerHTML = '<span class="loading-spin"></span> Fetching...';
 
-  if(stats&&stats.hits){
-    stats.hits.forEach(h=>{
-      const p=(h.path||'').toLowerCase();
-      const c=parseInt(h.count)||0;
-      domains.forEach(d=>{
-        const s=d.slug.toLowerCase();
-        const n=d.name.toLowerCase();
-        if(p.startsWith('buy-click-'+s)){dc[d.slug]+=c;tc+=c}
-        else if(p.startsWith('contact-click-'+s)){dcc[d.slug]+=c;tcc+=c}
-        else if(p.includes(s)||p.includes(n)||p==='/'){
-          // Check if this path belongs to this domain
-          if(p.includes(s)||p.includes(n)){dv[d.slug]+=c;tv+=c}
+  let totalVisits = 0, totalBuyClicks = 0;
+  let dv = {}, dc = {}, dcc = {};
+  domains.forEach(d => { dv[d.slug] = 0; dc[d.slug] = 0; dcc[d.slug] = 0; });
+
+  // Try /me first to verify token
+  addLog('--- Verifying token ---');
+  const me = await tryFetch('/me');
+
+  // Try /stats/total
+  addLog('--- Fetching total stats ---');
+  const total = await tryFetch('/stats/total');
+  if (total && total.count) {
+    totalVisits = total.count;
+    addLog('Total count: ' + total.count);
+  }
+
+  // Try /pages
+  addLog('--- Fetching pages ---');
+  const pages = await tryFetch('/pages?limit=100');
+  if (pages && pages.paths) {
+    addLog('Found ' + pages.paths.length + ' paths');
+    pages.paths.forEach(pg => {
+      const path = (pg.path || '').toLowerCase();
+      const count = pg.count || 0;
+      addLog('  Path: ' + path + ' = ' + count + ' visits');
+
+      domains.forEach(d => {
+        const s = d.slug.toLowerCase();
+        if (path.includes('buy-click-' + s)) {
+          dc[d.slug] += count;
+          totalBuyClicks += count;
+        } else if (path.includes('contact-click-' + s)) {
+          dcc[d.slug] += count;
+        } else if (path.includes(s) || path.includes(d.name.toLowerCase())) {
+          dv[d.slug] += count;
         }
       });
     });
   }
 
-  document.getElementById('totalVisits').textContent=tv.toLocaleString();
-  document.getElementById('totalClicks').textContent=tc.toLocaleString();
-  document.getElementById('convRate').textContent=tv>0?((tc/tv)*100).toFixed(1)+'%':'0%';
+  // Try /stats/hits if pages didn't work
+  if (!pages || !pages.paths) {
+    addLog('--- Trying /stats/hits ---');
+    const stats = await tryFetch('/stats/hits?limit=100');
+    if (stats && stats.hits) {
+      addLog('Found ' + stats.hits.length + ' hits');
+      stats.hits.forEach(hit => {
+        const path = (hit.path || '').toLowerCase();
+        const count = hit.count || 0;
+        addLog('  Hit: ' + path + ' = ' + count);
 
-  const mx=Math.max(...Object.values(dv),1);
-  document.getElementById('visitsChart').innerHTML=domains.map(d=>{
-    const v=dv[d.slug],h=Math.max(4,(v/mx)*100);
+        domains.forEach(d => {
+          const s = d.slug.toLowerCase();
+          if (path.includes('buy-click-' + s)) {
+            dc[d.slug] += count;
+            totalBuyClicks += count;
+          } else if (path.includes('contact-click-' + s)) {
+            dcc[d.slug] += count;
+          } else if (path.includes(s) || path.includes(d.name.toLowerCase())) {
+            dv[d.slug] += count;
+            if (!total) totalVisits += count;
+          }
+        });
+      });
+    }
+  }
+
+  // Update summary
+  document.getElementById('totalVisits').textContent = totalVisits.toLocaleString();
+  document.getElementById('totalClicks').textContent = totalBuyClicks.toLocaleString();
+  document.getElementById('convRate').textContent = totalVisits > 0 ? ((totalBuyClicks / totalVisits) * 100).toFixed(1) + '%' : '0%';
+
+  // Chart
+  const maxV = Math.max(...Object.values(dv), 1);
+  document.getElementById('visitsChart').innerHTML = domains.map(d => {
+    const v = dv[d.slug];
+    const h = Math.max(4, (v / maxV) * 100);
     return '<div class="bar-col"><div class="bar-value" style="color:'+d.color+'">'+v+'</div><div class="bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="bar-label">'+d.slug+'</div></div>';
   }).join('');
 
-  document.getElementById('domainCards').innerHTML=domains.map(d=>{
-    const v=dv[d.slug],b=dc[d.slug],co=dcc[d.slug];
-    const cr=v>0?((b/v)*100).toFixed(1)+'%':'0%';
+  // Cards
+  document.getElementById('domainCards').innerHTML = domains.map(d => {
+    const v=dv[d.slug], b=dc[d.slug], co=dcc[d.slug];
+    const cr = v>0 ? ((b/v)*100).toFixed(1)+'%' : '0%';
     return '<div class="domain-card"><div class="d-header"><div class="d-name" style="color:'+d.color+'">'+d.name+'</div><div class="d-badges"><span class="d-price">'+d.price+'</span><span class="d-type">'+d.type+'</span></div></div><div class="d-stats"><div class="d-stat"><div class="d-stat-value" style="color:var(--blue)">'+v+'</div><div class="d-stat-label">Visits</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--green)">'+b+'</div><div class="d-stat-label">Buy Clicks</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--amber)">'+co+'</div><div class="d-stat-label">Contact</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--cyan)">'+cr+'</div><div class="d-stat-label">Conv. Rate</div></div></div></div>';
   }).join('');
 
-  if(tv===0&&tc===0){
-    document.getElementById('domainCards').innerHTML+='<div class="no-data"><div class="icon">📭</div><p>Mazal ma kayn 7ta visiteur.<br>Mli les landing pages ybdaw khdamin, les données ghadi ytbano hna automatiquement.</p></div>';
-  }
-
-  document.getElementById('lastUpdate').textContent='Last update: '+new Date().toLocaleTimeString();
-  document.getElementById('statusBadge').textContent='Live Tracking Active';
+  document.getElementById('lastUpdate').textContent = 'Last update: ' + new Date().toLocaleTimeString();
+  document.getElementById('statusBadge').textContent = '● Live';
+  addLog('--- Done! ---');
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  const t=getToken();
-  if(t){showDashboard();setInterval(fetchAllData,60000)}
+window.addEventListener('DOMContentLoaded', () => {
+  fetchAllData();
+  setInterval(fetchAllData, 60000);
 });
 </script>
 </body>
