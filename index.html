@@ -5,266 +5,253 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Domain Portfolio — Live Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z974BMEM1"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-9Z974BMEM1');
-</script>
 <style>
 :root{--bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e4e6f0;--muted:#8b8fa3;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;--amber:#f59e0b;--cyan:#06b6d4}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:1.5rem}
-.header{text-align:center;margin-bottom:2rem}
-.header h1{font-size:1.8rem;font-weight:800;margin-bottom:.4rem}
-.header p{color:var(--muted);font-size:.9rem}
-.live-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.1);color:var(--green);font-size:.75rem;font-weight:600;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
-.live-badge::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.header{text-align:center;margin-bottom:1.5rem}
+.header h1{font-size:1.8rem;font-weight:800;margin-bottom:.3rem}
+.header p{color:var(--muted);font-size:.85rem}
+.live{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.1);color:var(--green);font-size:.72rem;font-weight:600;padding:.3rem .8rem;border-radius:2rem;margin-top:.6rem}
+.live::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
-.tab{padding:.6rem 1.2rem;border-radius:10px 10px 0 0;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;border:1px solid transparent;border-bottom:none}
-.tab.active{background:var(--card);color:var(--text);border-color:var(--border)}
-.tab:hover{color:var(--text)}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-.sum-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;text-align:center}
-.sum-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem}
-.sum-value{font-size:1.5rem;font-weight:800}
-.sum-sub{font-size:.7rem;color:var(--muted);margin-top:.2rem}
-.domains{display:flex;flex-direction:column;gap:1rem}
-.domain-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:border-color .2s}
-.domain-card:hover{border-color:var(--blue)}
-.d-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
-.d-name{font-size:1.05rem;font-weight:800}
-.d-badges{display:flex;gap:.4rem;flex-wrap:wrap}
-.d-price{background:rgba(16,185,129,.1);color:var(--green);font-weight:700;font-size:.78rem;padding:.25rem .7rem;border-radius:2rem}
-.d-type{background:rgba(139,92,246,.1);color:var(--purple);font-weight:600;font-size:.72rem;padding:.25rem .7rem;border-radius:2rem}
-.d-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
-.d-stat{background:var(--bg);border-radius:10px;padding:.8rem;text-align:center}
-.d-stat-value{font-size:1.2rem;font-weight:800;margin-bottom:.2rem}
-.d-stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
-.btn{display:inline-block;background:var(--blue);color:#fff;font-size:.78rem;font-weight:700;padding:.5rem 1rem;border-radius:10px;border:none;cursor:pointer}
+
+/* Setup */
+.setup{max-width:520px;margin:2rem auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center}
+.setup h2{font-size:1.1rem;margin-bottom:.8rem}
+.setup p{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+.setup input{width:100%;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;margin-bottom:.8rem;font-family:monospace}
+.setup input:focus{outline:none;border-color:var(--blue)}
+.btn{display:inline-block;background:var(--blue);color:#fff;font-size:.85rem;font-weight:700;padding:.7rem 1.8rem;border-radius:10px;border:none;cursor:pointer}
 .btn:hover{opacity:.9}
-.chart-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:2rem}
-.chart-title{font-size:.9rem;font-weight:700;margin-bottom:1rem}
-.bar-chart{display:flex;align-items:flex-end;gap:.6rem;height:160px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem}
-.bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;transition:height .8s ease}
-.bar-label{font-size:.58rem;color:var(--muted);text-align:center;line-height:1.2}
-.bar-value{font-size:.68rem;font-weight:700}
-.refresh-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
-.refresh-bar .last-update{font-size:.75rem;color:var(--muted)}
-.loading-spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-.d-link{display:inline-block;margin-top:.6rem;font-size:.75rem;color:var(--blue);text-decoration:none;font-weight:600}
-.d-link:hover{text-decoration:underline}
-.analytics-links{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
-.a-link{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;text-decoration:none;color:var(--text);transition:border-color .2s}
-.a-link:hover{border-color:var(--blue)}
-.a-link .icon{font-size:2rem;margin-bottom:.5rem}
-.a-link h3{font-size:.95rem;font-weight:700;margin-bottom:.3rem}
-.a-link p{font-size:.78rem;color:var(--muted);line-height:1.4}
-.info-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem;font-size:.82rem;line-height:1.6;color:var(--muted)}
-.info-box strong{color:var(--text)}
-.status-text{font-size:.72rem;color:var(--muted);margin-top:.3rem}
-.footer{text-align:center;margin-top:2rem;font-size:.75rem;color:var(--muted)}
+.btn-sm{font-size:.75rem;padding:.4rem 1rem}
+.steps{text-align:left;margin:1rem 0}
+.steps li{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;line-height:1.5}
+.steps code{background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-size:.75rem;color:var(--cyan)}
+
+/* Main */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.5rem}
+.sum{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center}
+.sum-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem}
+.sum-val{font-size:1.4rem;font-weight:800}
+.refresh-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.refresh-bar span{font-size:.72rem;color:var(--muted)}
+.domains{display:flex;flex-direction:column;gap:.8rem}
+.dc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border-color .2s}
+.dc:hover{border-color:var(--blue)}
+.dc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.4rem}
+.dc-name{font-size:.95rem;font-weight:800}
+.dc-badges{display:flex;gap:.3rem}
+.dc-badge{font-size:.68rem;font-weight:600;padding:.2rem .6rem;border-radius:2rem}
+.dc-price{background:rgba(16,185,129,.1);color:var(--green)}
+.dc-type{background:rgba(139,92,246,.1);color:var(--purple)}
+.dc-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.ds{background:var(--bg);border-radius:8px;padding:.6rem;text-align:center}
+.ds-val{font-size:1rem;font-weight:800;margin-bottom:.1rem}
+.ds-label{font-size:.58rem;color:var(--muted);text-transform:uppercase}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin-bottom:1.5rem}
+.chart-title{font-size:.85rem;font-weight:700;margin-bottom:.8rem}
+.bars{display:flex;align-items:flex-end;gap:.5rem;height:140px}
+.bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.b{width:100%;border-radius:5px 5px 0 0;min-height:3px;transition:height .6s}
+.bl{font-size:.55rem;color:var(--muted);text-align:center;line-height:1.1}
+.bv{font-size:.62rem;font-weight:700}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{background:rgba(239,68,68,.1);color:var(--red);padding:.8rem;border-radius:10px;margin:1rem 0;font-size:.8rem}
+.disc{font-size:.7rem;color:var(--red);cursor:pointer;text-decoration:underline;margin-left:.8rem}
+.footer{text-align:center;margin-top:1.5rem;font-size:.72rem;color:var(--muted)}
 .footer a{color:var(--blue);text-decoration:none}
-@media(max-width:768px){.summary{grid-template-columns:1fr 1fr}.d-stats{grid-template-columns:1fr 1fr}.analytics-links{grid-template-columns:1fr}}
-@media(max-width:480px){.summary{grid-template-columns:1fr}}
+.hidden{display:none}
+@media(max-width:768px){.summary{grid-template-columns:1fr 1fr}.dc-stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.summary{grid-template-columns:1fr}.dc-stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>📊 Domain Portfolio</h1>
-  <p>Dashboard — Portfolio & Live Analytics</p>
-  <div class="live-badge" id="statusBadge">Loading...</div>
+  <h1>📊 Domain Portfolio — Live</h1>
+  <p>Traffic & Analytics Dashboard</p>
+  <div class="live" id="status">Connecting...</div>
 </div>
 
-<div class="tabs">
-  <div class="tab active" onclick="switchTab(event,'portfolio')">📋 Portfolio</div>
-  <div class="tab" onclick="switchTab(event,'traffic')">📈 Traffic</div>
-  <div class="tab" onclick="switchTab(event,'links')">🔗 Full Analytics</div>
+<!-- SETUP -->
+<div id="setup" class="setup">
+  <h2>⚡ Connect Dashboard</h2>
+  <p>Bach tchouf les analytics hna directement, khasek Cloudflare Worker (proxy gratuit). Drtha f 5 minutes:</p>
+  <ol class="steps">
+    <li>Sir l <a href="https://workers.cloudflare.com" target="_blank" style="color:var(--blue)">workers.cloudflare.com</a> → Sign up (gratuit)</li>
+    <li>Click <strong>"Create a Worker"</strong></li>
+    <li>Mseh le code li kayn o <strong>colli le code mn fichier <code>worker.js</code></strong> li 3titek</li>
+    <li>F le code, bddel <code>REPLACE_WITH_YOUR_NEW_TOKEN</code> b le API token jdid dyal GoatCounter</li>
+    <li>Click <strong>"Deploy"</strong></li>
+    <li>Copié le URL dyal le Worker (bhal: <code>https://my-worker.username.workers.dev</code>)</li>
+    <li>Colih hna 👇</li>
+  </ol>
+  <input type="text" id="workerInput" placeholder="https://my-worker.username.workers.dev">
+  <br>
+  <button class="btn" onclick="saveWorker()">Connect ✅</button>
 </div>
 
-<!-- TAB 1: Portfolio -->
-<div class="tab-content active" id="tab-portfolio">
-  <div class="summary">
-    <div class="sum-card"><div class="sum-label">Total Domains</div><div class="sum-value" style="color:var(--blue)">8</div></div>
-    <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" style="color:var(--green)">$21,600</div></div>
-    <div class="sum-card"><div class="sum-label">Avg. Price</div><div class="sum-value" style="color:var(--purple)">$2,700</div></div>
-    <div class="sum-card"><div class="sum-label">Highest</div><div class="sum-value" style="color:var(--amber)">$10K</div></div>
-  </div>
-  <div class="chart-section">
-    <div class="chart-title">💰 Price Distribution</div>
-    <div class="bar-chart" id="priceChart"></div>
-  </div>
-  <h2 style="font-size:1.1rem;font-weight:800;margin:1.5rem 0 1rem">🌐 All Domains</h2>
-  <div class="domains" id="portfolioCards"></div>
-</div>
-
-<!-- TAB 2: Traffic -->
-<div class="tab-content" id="tab-traffic">
+<!-- MAIN DASHBOARD -->
+<div id="main" class="hidden">
   <div class="refresh-bar">
-    <span class="last-update" id="lastUpdate">Loading traffic data...</span>
-    <button class="btn" onclick="fetchTraffic()">🔄 Refresh</button>
+    <span id="lastUp">Loading...</span>
+    <div>
+      <button class="btn btn-sm" onclick="loadData()">🔄 Refresh</button>
+      <span class="disc" onclick="resetWorker()">Reset</span>
+    </div>
   </div>
-  <div class="summary" id="trafficSummary">
-    <div class="sum-card"><div class="sum-label">Total Visits</div><div class="sum-value" style="color:var(--blue)" id="totalVisits"><span class="loading-spin"></span></div></div>
-    <div class="sum-card"><div class="sum-label">Buy Clicks</div><div class="sum-value" style="color:var(--green)" id="totalClicks"><span class="loading-spin"></span></div></div>
-    <div class="sum-card"><div class="sum-label">Contact Clicks</div><div class="sum-value" style="color:var(--amber)" id="totalContacts"><span class="loading-spin"></span></div></div>
-    <div class="sum-card"><div class="sum-label">Conv. Rate</div><div class="sum-value" style="color:var(--cyan)" id="convRate">—</div></div>
+
+  <div class="summary">
+    <div class="sum"><div class="sum-label">Total Visits</div><div class="sum-val" style="color:var(--blue)" id="tv">—</div></div>
+    <div class="sum"><div class="sum-label">Buy Clicks</div><div class="sum-val" style="color:var(--green)" id="tc">—</div></div>
+    <div class="sum"><div class="sum-label">Contact Clicks</div><div class="sum-val" style="color:var(--amber)" id="tco">—</div></div>
+    <div class="sum"><div class="sum-label">Conversion</div><div class="sum-val" style="color:var(--cyan)" id="cr">—</div></div>
   </div>
-  <div class="chart-section">
+
+  <div class="chart-box">
     <div class="chart-title">📈 Visits by Domain</div>
-    <div class="bar-chart" id="visitsChart"></div>
+    <div class="bars" id="chart"></div>
   </div>
-  <h2 style="font-size:1.1rem;font-weight:800;margin:1.5rem 0 1rem">🌐 Domain Traffic</h2>
-  <div class="domains" id="trafficCards"></div>
-  <p class="status-text" id="fetchStatus"></p>
+
+  <div class="chart-box">
+    <div class="chart-title">🖱️ Buy Clicks by Domain</div>
+    <div class="bars" id="clickChart"></div>
+  </div>
+
+  <h2 style="font-size:1rem;font-weight:800;margin:1rem 0 .8rem">🌐 Domain Details</h2>
+  <div class="domains" id="cards"></div>
+  <div id="errBox" class="err hidden"></div>
 </div>
 
-<!-- TAB 3: Links -->
-<div class="tab-content" id="tab-links">
-  <div class="info-box">
-    <strong>📊 Full analytics dashboards</strong><br>
-    Had les liens kaydiwk l les dashboards dyal Google Analytics o GoatCounter fin tchouf kamlin les détails dyal les visiteurs.
-  </div>
-  <div class="analytics-links">
-    <a class="a-link" href="https://analytics.google.com" target="_blank">
-      <div class="icon">📊</div>
-      <h3>Google Analytics</h3>
-      <p>Visiteurs, pays, temps réel, conversions, appareil, navigateur — kamlin les détails</p>
-    </a>
-    <a class="a-link" href="https://bravirus.goatcounter.com" target="_blank">
-      <div class="icon">🐐</div>
-      <h3>GoatCounter</h3>
-      <p>Visiteurs, pages vues, referrers, paths — simple o rapide</p>
-    </a>
-  </div>
-  <div class="info-box">
-    <strong>Measurement ID:</strong> G-9Z974BMEM1<br>
-    <strong>GoatCounter:</strong> bravirus.goatcounter.com
-  </div>
+<div class="footer">
+  <a href="https://bravirus.goatcounter.com" target="_blank">GoatCounter</a> · <a href="https://analytics.google.com" target="_blank">Google Analytics</a> · Auto-refresh 60s
 </div>
-
-<div class="footer">Portfolio Dashboard &middot; <a href="https://bravirus.goatcounter.com" target="_blank">GoatCounter</a> &middot; <a href="https://analytics.google.com" target="_blank">Google Analytics</a></div>
 
 <script>
-const domains = [
-  {name:"seattledietfoods.com",slug:"seattledietfoods",price:1500,priceStr:"$1,500",color:"#10b981",type:"Geo-Niche",chars:20,keywords:3,link:"https://checkoutlink.godaddy.com/e1287d42-9cb2-4cd2-9c8f-17e6fa3950ff"},
-  {name:"ottawadietdirect.com",slug:"ottawadietdirect",price:1500,priceStr:"$1,500",color:"#10b981",type:"Geo-Niche",chars:19,keywords:3,link:"https://checkoutlink.godaddy.com/350f0d89-df9e-4dcb-b0ee-832c58aef6ce"},
-  {name:"divingontario.com",slug:"divingontario",price:1500,priceStr:"$1,500",color:"#06b6d4",type:"Geo-Niche",chars:16,keywords:2,link:"https://checkoutlink.godaddy.com/34c30a31-5b8e-4487-9392-b321460c9568"},
-  {name:"santof.com",slug:"santof",price:1800,priceStr:"$1,800",color:"#8b5cf6",type:"Brandable",chars:6,keywords:0,link:"https://checkoutlink.godaddy.com/c2a02ed2-b1e6-42df-b01d-7424e6254bbb"},
-  {name:"iddic.com",slug:"iddic",price:2000,priceStr:"$2,000",color:"#3b82f6",type:"Brandable",chars:5,keywords:1,link:"https://checkoutlink.godaddy.com/2daaee62-7338-467f-9e6a-f24647e0fda1"},
-  {name:"cvcas.com",slug:"cvcas",price:0,priceStr:"—",color:"#3b82f6",type:"Brandable",chars:5,keywords:1,link:"#"},
-  {name:"PromptBootAI.com",slug:"promptbootai",price:3000,priceStr:"$3,000",color:"#f59e0b",type:"AI/Trending",chars:14,keywords:3,link:"https://checkoutlink.godaddy.com/ad50fec7-1499-465b-8456-2f87aba6baa7"},
-  {name:"Hetod.com",slug:"hetod",price:10000,priceStr:"$10,000",color:"#ef4444",type:"Premium",chars:5,keywords:0,link:"https://checkoutlink.godaddy.com/ce9b6d9a-3337-40f2-8392-e31eeb2cabf2"}
+const D=[
+  {n:"seattledietfoods.com",s:"seattledietfoods",p:"$1,500",c:"#10b981",t:"Geo-Niche"},
+  {n:"ottawadietdirect.com",s:"ottawadietdirect",p:"$1,500",c:"#10b981",t:"Geo-Niche"},
+  {n:"divingontario.com",s:"divingontario",p:"$1,500",c:"#06b6d4",t:"Geo-Niche"},
+  {n:"santof.com",s:"santof",p:"$1,800",c:"#8b5cf6",t:"Brandable"},
+  {n:"iddic.com",s:"iddic",p:"$2,000",c:"#3b82f6",t:"Brandable"},
+  {n:"cvcas.com",s:"cvcas",p:"—",c:"#3b82f6",t:"Brandable"},
+  {n:"PromptBootAI.com",s:"promptbootai",p:"$3,000",c:"#f59e0b",t:"AI/Trending"},
+  {n:"Hetod.com",s:"hetod",p:"$10,000",c:"#ef4444",t:"Premium"}
 ];
 
-const GC = 'bravirus.goatcounter.com';
+function getW(){try{return localStorage.getItem('worker_url')}catch(e){return null}}
+function saveWorker(){
+  const u=document.getElementById('workerInput').value.trim();
+  if(!u||!u.startsWith('http'))return alert('Colli le URL dyal le Worker!');
+  try{localStorage.setItem('worker_url',u)}catch(e){}
+  showMain();
+}
+function resetWorker(){try{localStorage.removeItem('worker_url')}catch(e){}location.reload()}
 
-// Fetch count from GoatCounter public counter endpoint
-async function getCount(path) {
-  try {
-    const r = await fetch('https://' + GC + '/counter/' + encodeURIComponent(path) + '.json');
-    if (!r.ok) return {count: 0, count_unique: 0};
-    const d = await r.json();
-    return {count: parseInt(d.count) || 0, count_unique: parseInt(d.count_unique) || 0};
-  } catch(e) {
-    return {count: 0, count_unique: 0};
+function showMain(){
+  document.getElementById('setup').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+  loadData();
+}
+
+async function gcFetch(endpoint){
+  const w=getW();
+  if(!w)return null;
+  try{
+    const r=await fetch(w+'?endpoint='+encodeURIComponent(endpoint));
+    if(!r.ok)return null;
+    return await r.json();
+  }catch(e){
+    document.getElementById('errBox').textContent='⚠️ Error: '+e.message;
+    document.getElementById('errBox').classList.remove('hidden');
+    return null;
   }
 }
 
-async function fetchTraffic() {
-  document.getElementById('statusBadge').innerHTML = '<span class="loading-spin"></span> Fetching...';
-  document.getElementById('fetchStatus').textContent = 'Fetching data from GoatCounter...';
+async function loadData(){
+  document.getElementById('status').innerHTML='<span class="spin"></span> Fetching...';
+  document.getElementById('errBox').classList.add('hidden');
+
+  let dv={},dc={},dcc={};
+  D.forEach(d=>{dv[d.s]=0;dc[d.s]=0;dcc[d.s]=0});
+  let tv=0,tc=0,tco=0;
+
+  // Fetch all paths
+  const data=await gcFetch('/pages?limit=200');
   
-  let totalV = 0, totalB = 0, totalC = 0;
-  let results = [];
+  if(data&&data.paths){
+    data.paths.forEach(pg=>{
+      const path=(pg.path||'').toLowerCase();
+      const count=parseInt(pg.count)||0;
 
-  for (const d of domains) {
-    // Fetch page visits - try multiple path formats
-    let visits = await getCount('/');
-    const visits2 = await getCount('/' + d.slug);
-    const visits3 = await getCount(d.name.toLowerCase());
-    
-    // Fetch buy clicks
-    const buys = await getCount('buy-click-' + d.slug);
-    
-    // Fetch contact clicks
-    const contacts = await getCount('contact-click-' + d.slug);
-    
-    const v = Math.max(visits2.count, visits3.count);
-    const b = buys.count;
-    const c = contacts.count;
-    
-    results.push({...d, visits: v, buyClicks: b, contactClicks: c});
-    totalV += v;
-    totalB += b;
-    totalC += c;
+      D.forEach(d=>{
+        const sl=d.s.toLowerCase();
+        const nm=d.n.toLowerCase();
+        if(path.includes('buy-click-'+sl)){dc[d.s]+=count;tc+=count}
+        else if(path.includes('contact-click-'+sl)){dcc[d.s]+=count;tco+=count}
+        else if(path.includes(sl)||path.includes(nm)){dv[d.s]+=count;tv+=count}
+      });
+    });
   }
 
-  // If individual counts are 0, get total from root
-  if (totalV === 0) {
-    const rootCount = await getCount('/');
-    totalV = rootCount.count;
+  // Fallback: try /stats/total
+  if(tv===0){
+    const tot=await gcFetch('/stats/total');
+    if(tot&&tot.count)tv=parseInt(tot.count)||0;
   }
 
-  // Update summary
-  document.getElementById('totalVisits').textContent = totalV.toLocaleString();
-  document.getElementById('totalClicks').textContent = totalB.toLocaleString();
-  document.getElementById('totalContacts').textContent = totalC.toLocaleString();
-  document.getElementById('convRate').textContent = totalV > 0 ? ((totalB/totalV)*100).toFixed(1)+'%' : '0%';
+  // Fallback: try /stats/hits
+  if(!data||!data.paths){
+    const hits=await gcFetch('/stats/hits?limit=200');
+    if(hits&&hits.hits){
+      hits.hits.forEach(h=>{
+        const path=(h.path||'').toLowerCase();
+        const count=parseInt(h.count)||0;
+        D.forEach(d=>{
+          const sl=d.s.toLowerCase();
+          if(path.includes('buy-click-'+sl)){dc[d.s]+=count;tc+=count}
+          else if(path.includes('contact-click-'+sl)){dcc[d.s]+=count;tco+=count}
+          else if(path.includes(sl)||path.includes(d.n.toLowerCase())){dv[d.s]+=count;tv+=count}
+        });
+      });
+    }
+  }
 
-  // Visits chart
-  const maxV = Math.max(...results.map(r=>r.visits), 1);
-  document.getElementById('visitsChart').innerHTML = results.map(r => {
-    const h = Math.max(4, (r.visits/maxV)*100);
-    return '<div class="bar-col"><div class="bar-value" style="color:'+r.color+'">'+r.visits+'</div><div class="bar" style="height:'+h+'%;background:'+r.color+'"></div><div class="bar-label">'+r.slug+'</div></div>';
+  // Update UI
+  document.getElementById('tv').textContent=tv.toLocaleString();
+  document.getElementById('tc').textContent=tc.toLocaleString();
+  document.getElementById('tco').textContent=tco.toLocaleString();
+  document.getElementById('cr').textContent=tv>0?((tc/tv)*100).toFixed(1)+'%':'0%';
+
+  // Visit chart
+  const mx=Math.max(...Object.values(dv),1);
+  document.getElementById('chart').innerHTML=D.map(d=>{
+    const v=dv[d.s],h=Math.max(3,(v/mx)*100);
+    return '<div class="bc"><div class="bv" style="color:'+d.c+'">'+v+'</div><div class="b" style="height:'+h+'%;background:'+d.c+'"></div><div class="bl">'+d.s+'</div></div>';
   }).join('');
 
-  // Traffic cards
-  document.getElementById('trafficCards').innerHTML = results.map(r => {
-    const cr = r.visits > 0 ? ((r.buyClicks/r.visits)*100).toFixed(1)+'%' : '0%';
-    return '<div class="domain-card"><div class="d-header"><div class="d-name" style="color:'+r.color+'">'+r.name+'</div><div class="d-badges"><span class="d-price">'+r.priceStr+'</span><span class="d-type">'+r.type+'</span></div></div><div class="d-stats"><div class="d-stat"><div class="d-stat-value" style="color:var(--blue)">'+r.visits+'</div><div class="d-stat-label">Visits</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--green)">'+r.buyClicks+'</div><div class="d-stat-label">Buy Clicks</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--amber)">'+r.contactClicks+'</div><div class="d-stat-label">Contact</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--cyan)">'+cr+'</div><div class="d-stat-label">Conv. Rate</div></div></div></div>';
+  // Click chart
+  const mxc=Math.max(...Object.values(dc),1);
+  document.getElementById('clickChart').innerHTML=D.map(d=>{
+    const v=dc[d.s],h=Math.max(3,(v/mxc)*100);
+    return '<div class="bc"><div class="bv" style="color:'+d.c+'">'+v+'</div><div class="b" style="height:'+h+'%;background:'+d.c+'"></div><div class="bl">'+d.s+'</div></div>';
   }).join('');
 
-  document.getElementById('lastUpdate').textContent = 'Last update: ' + new Date().toLocaleTimeString();
-  document.getElementById('statusBadge').textContent = '● Live';
-  document.getElementById('fetchStatus').textContent = 'Data fetched at ' + new Date().toLocaleTimeString();
+  // Cards
+  document.getElementById('cards').innerHTML=D.map(d=>{
+    const v=dv[d.s],b=dc[d.s],co=dcc[d.s];
+    const r=v>0?((b/v)*100).toFixed(1)+'%':'0%';
+    return '<div class="dc"><div class="dc-top"><div class="dc-name" style="color:'+d.c+'">'+d.n+'</div><div class="dc-badges"><span class="dc-badge dc-price">'+d.p+'</span><span class="dc-badge dc-type">'+d.t+'</span></div></div><div class="dc-stats"><div class="ds"><div class="ds-val" style="color:var(--blue)">'+v+'</div><div class="ds-label">Visits</div></div><div class="ds"><div class="ds-val" style="color:var(--green)">'+b+'</div><div class="ds-label">Buy Clicks</div></div><div class="ds"><div class="ds-val" style="color:var(--amber)">'+co+'</div><div class="ds-label">Contact</div></div><div class="ds"><div class="ds-val" style="color:var(--cyan)">'+r+'</div><div class="ds-label">Conv Rate</div></div><div class="ds"><div class="ds-val">.COM</div><div class="ds-label">TLD</div></div></div></div>';
+  }).join('');
+
+  document.getElementById('lastUp').textContent='Last update: '+new Date().toLocaleTimeString();
+  document.getElementById('status').textContent='● Live';
 }
 
-// Portfolio tab
-function renderPortfolio() {
-  const maxP = Math.max(...domains.map(d=>d.price));
-  document.getElementById('priceChart').innerHTML = domains.filter(d=>d.price>0).map(d => {
-    const h = Math.max(4,(d.price/maxP)*100);
-    return '<div class="bar-col"><div class="bar-value" style="color:'+d.color+'">$'+d.price.toLocaleString()+'</div><div class="bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="bar-label">'+d.slug+'</div></div>';
-  }).join('');
-
-  const score = d => Math.min(100, Math.max(20, 100-(d.chars*3)+(d.keywords*15)+(d.price>2000?10:0)));
-  document.getElementById('portfolioCards').innerHTML = domains.map(d => {
-    const s = score(d);
-    return '<div class="domain-card"><div class="d-header"><div class="d-name" style="color:'+d.color+'">'+d.name+'</div><div class="d-badges"><span class="d-price">'+d.priceStr+'</span><span class="d-type">'+d.type+'</span></div></div><div class="d-stats"><div class="d-stat"><div class="d-stat-value">'+d.chars+'</div><div class="d-stat-label">Chars</div></div><div class="d-stat"><div class="d-stat-value">'+d.keywords+'</div><div class="d-stat-label">Keywords</div></div><div class="d-stat"><div class="d-stat-value">.COM</div><div class="d-stat-label">TLD</div></div><div class="d-stat"><div class="d-stat-value" style="color:'+d.color+'">'+s+'/100</div><div class="d-stat-label">Score</div></div></div>'+(d.link!=='#'?'<a class="d-link" href="'+d.link+'" target="_blank">View listing →</a>':'')+'</div>';
-  }).join('');
-}
-
-// Tab switching
-function switchTab(evt, tab) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  evt.target.classList.add('active');
-  if (tab === 'traffic') fetchTraffic();
-}
-
-// Init
-window.addEventListener('DOMContentLoaded', () => {
-  renderPortfolio();
-  document.getElementById('statusBadge').textContent = '● Ready';
+window.addEventListener('DOMContentLoaded',()=>{
+  const w=getW();
+  if(w){showMain();setInterval(loadData,60000)}
 });
 </script>
 </body>
