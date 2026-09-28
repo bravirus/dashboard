@@ -15,6 +15,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .live-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.1);color:var(--green);font-size:.75rem;font-weight:600;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
 .live-badge::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;flex-wrap:wrap}
+.tab{padding:.6rem 1.2rem;border-radius:10px 10px 0 0;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;border:1px solid transparent;border-bottom:none}
+.tab.active{background:var(--card);color:var(--text);border-color:var(--border)}
+.tab:hover{color:var(--text)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Portfolio tab */
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .sum-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;text-align:center}
 .sum-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem}
@@ -23,20 +31,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .domains{display:flex;flex-direction:column;gap:1rem}
 .domain-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:border-color .2s}
 .domain-card:hover{border-color:var(--blue)}
-.d-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.d-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
 .d-name{font-size:1.05rem;font-weight:800}
 .d-badges{display:flex;gap:.4rem;flex-wrap:wrap}
 .d-price{background:rgba(16,185,129,.1);color:var(--green);font-weight:700;font-size:.78rem;padding:.25rem .7rem;border-radius:2rem}
 .d-type{background:rgba(139,92,246,.1);color:var(--purple);font-weight:600;font-size:.72rem;padding:.25rem .7rem;border-radius:2rem}
-.d-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
-.d-stat{background:var(--bg);border-radius:10px;padding:.8rem;text-align:center}
-.d-stat-value{font-size:1.2rem;font-weight:800;margin-bottom:.2rem}
-.d-stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
-.loading-spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.refresh-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
-.refresh-bar .last-update{font-size:.75rem;color:var(--muted)}
-.btn{display:inline-block;background:var(--blue);color:#fff;font-size:.78rem;font-weight:700;padding:.5rem 1rem;border-radius:10px;border:none;cursor:pointer}
+.d-info{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+.d-info-item{background:var(--bg);border-radius:8px;padding:.6rem;text-align:center}
+.d-info-val{font-size:.9rem;font-weight:700;margin-bottom:.1rem}
+.d-info-label{font-size:.6rem;color:var(--muted);text-transform:uppercase}
+.d-link{display:inline-block;margin-top:.8rem;font-size:.78rem;color:var(--blue);text-decoration:none;font-weight:600}
+.d-link:hover{text-decoration:underline}
 .chart-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:2rem}
 .chart-title{font-size:.9rem;font-weight:700;margin-bottom:1rem}
 .bar-chart{display:flex;align-items:flex-end;gap:.6rem;height:160px}
@@ -44,192 +49,113 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;transition:height .8s ease}
 .bar-label{font-size:.58rem;color:var(--muted);text-align:center;line-height:1.2}
 .bar-value{font-size:.68rem;font-weight:700}
-.no-data{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-top:1rem}
-.no-data .icon{font-size:2.5rem;margin-bottom:.8rem}
-.status-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin:1rem 0;font-size:.78rem;color:var(--muted);font-family:monospace;white-space:pre-wrap;word-break:break-all;max-height:150px;overflow:auto}
+
+/* Analytics tab - iframe */
+.gc-frame-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1rem}
+.gc-frame-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.gc-frame-header h2{font-size:1rem;font-weight:700}
+.gc-frame-header a{font-size:.78rem;color:var(--blue);text-decoration:none}
+.gc-frame{width:100%;height:700px;border:none;background:#fff;border-radius:0 0 16px 16px}
+.gc-notice{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem;font-size:.85rem;color:var(--text);line-height:1.6}
+.gc-notice strong{color:var(--blue)}
+.gc-steps{margin:.8rem 0;padding-left:1.2rem}
+.gc-steps li{margin-bottom:.4rem;font-size:.82rem;color:var(--muted)}
+
 .footer{text-align:center;margin-top:2rem;font-size:.75rem;color:var(--muted)}
 .footer a{color:var(--blue);text-decoration:none}
-@media(max-width:768px){.summary{grid-template-columns:1fr 1fr}.d-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.summary{grid-template-columns:1fr 1fr}.d-info{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="header">
   <h1>📊 Domain Portfolio</h1>
-  <p>Live Dashboard — Analytics & Performance</p>
-  <div class="live-badge" id="statusBadge"><span class="loading-spin"></span> Loading...</div>
+  <p>Dashboard — Portfolio & Live Analytics</p>
+  <div class="live-badge">Live Dashboard</div>
 </div>
 
-<div class="refresh-bar">
-  <span class="last-update" id="lastUpdate">Loading data...</span>
-  <button class="btn" onclick="fetchAllData()">🔄 Refresh</button>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('portfolio')">📋 Portfolio</div>
+  <div class="tab" onclick="switchTab('analytics')">📈 Live Analytics</div>
 </div>
 
-<div class="summary">
-  <div class="sum-card"><div class="sum-label">Total Visits</div><div class="sum-value" style="color:var(--blue)" id="totalVisits">—</div><div class="sum-sub">All domains</div></div>
-  <div class="sum-card"><div class="sum-label">Buy Clicks</div><div class="sum-value" style="color:var(--green)" id="totalClicks">—</div><div class="sum-sub">All domains</div></div>
-  <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" style="color:var(--amber)">$21,600</div><div class="sum-sub">8 domains</div></div>
-  <div class="sum-card"><div class="sum-label">Conversion Rate</div><div class="sum-value" style="color:var(--cyan)" id="convRate">—</div><div class="sum-sub">Clicks / Visits</div></div>
+<!-- TAB 1: Portfolio -->
+<div class="tab-content active" id="tab-portfolio">
+  <div class="summary">
+    <div class="sum-card"><div class="sum-label">Total Domains</div><div class="sum-value" style="color:var(--blue)">8</div><div class="sum-sub">Active listings</div></div>
+    <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" style="color:var(--green)">$21,600</div><div class="sum-sub">Total asking price</div></div>
+    <div class="sum-card"><div class="sum-label">Avg. Price</div><div class="sum-value" style="color:var(--purple)">$2,700</div><div class="sum-sub">Per domain</div></div>
+    <div class="sum-card"><div class="sum-label">Highest</div><div class="sum-value" style="color:var(--amber)">$10,000</div><div class="sum-sub">Hetod.com</div></div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">💰 Price Distribution</div>
+    <div class="bar-chart" id="priceChart"></div>
+  </div>
+
+  <h2 style="font-size:1.1rem;font-weight:800;margin:1.5rem 0 1rem">🌐 All Domains</h2>
+  <div class="domains" id="domainCards"></div>
 </div>
 
-<div class="chart-section">
-  <div class="chart-title">📈 Visits by Domain</div>
-  <div class="bar-chart" id="visitsChart"></div>
+<!-- TAB 2: Analytics -->
+<div class="tab-content" id="tab-analytics">
+  <div class="gc-notice">
+    <strong>📈 Live Analytics — GoatCounter</strong><br>
+    Had la section katban lik les visiteurs en direct. Ila ma katbanch, dir had chi:
+    <ol class="gc-steps">
+      <li>Sir l <a href="https://bravirus.goatcounter.com/settings" target="_blank" style="color:var(--blue)">GoatCounter Settings</a></li>
+      <li>Activi <strong>"Make statistics public"</strong></li>
+      <li>F <strong>"Sites that can embed"</strong> zid: <code>bravirus.github.io</code></li>
+      <li>Save o refresh had la page</li>
+    </ol>
+  </div>
+  
+  <div class="gc-frame-wrap">
+    <div class="gc-frame-header">
+      <h2>📊 GoatCounter — Live Visitors</h2>
+      <a href="https://bravirus.goatcounter.com" target="_blank">Open full dashboard →</a>
+    </div>
+    <iframe class="gc-frame" src="https://bravirus.goatcounter.com?no-nav" loading="lazy"></iframe>
+  </div>
 </div>
 
-<h2 style="font-size:1.2rem;font-weight:800;margin:1.5rem 0 1rem">🌐 Domain Details</h2>
-<div class="domains" id="domainCards"></div>
-
-<div class="status-box" id="statusLog">Connecting to GoatCounter...</div>
-
-<div class="footer">Powered by <a href="https://bravirus.goatcounter.com" target="_blank">GoatCounter</a> &middot; Auto-refresh every 60s</div>
+<div class="footer">
+  Portfolio Dashboard &middot; Analytics by <a href="https://bravirus.goatcounter.com" target="_blank">GoatCounter</a>
+</div>
 
 <script>
-const GC = 'bravirus.goatcounter.com';
-const TOKEN = 'l1ir4nzgw9qmyp95z77x41g1rg9rnbtr5vx71n77f0thupnm1';
-
 const domains = [
-  {name:"seattledietfoods.com", slug:"seattledietfoods", price:"$1,500", color:"#10b981", type:"Geo-Niche"},
-  {name:"ottawadietdirect.com", slug:"ottawadietdirect", price:"$1,500", color:"#10b981", type:"Geo-Niche"},
-  {name:"divingontario.com", slug:"divingontario", price:"$1,500", color:"#06b6d4", type:"Geo-Niche"},
-  {name:"santof.com", slug:"santof", price:"$1,800", color:"#8b5cf6", type:"Brandable"},
-  {name:"iddic.com", slug:"iddic", price:"$2,000", color:"#3b82f6", type:"Brandable"},
-  {name:"cvcas.com", slug:"cvcas", price:"—", color:"#3b82f6", type:"Brandable"},
-  {name:"PromptBootAI.com", slug:"promptbootai", price:"$3,000", color:"#f59e0b", type:"AI/Trending"},
-  {name:"Hetod.com", slug:"hetod", price:"$10,000", color:"#ef4444", type:"Premium"}
+  {name:"seattledietfoods.com", slug:"seattledietfoods", price:1500, priceStr:"$1,500", color:"#10b981", type:"Geo-Niche", chars:20, keywords:3, link:"https://checkoutlink.godaddy.com/e1287d42-9cb2-4cd2-9c8f-17e6fa3950ff"},
+  {name:"ottawadietdirect.com", slug:"ottawadietdirect", price:1500, priceStr:"$1,500", color:"#10b981", type:"Geo-Niche", chars:19, keywords:3, link:"https://checkoutlink.godaddy.com/350f0d89-df9e-4dcb-b0ee-832c58aef6ce"},
+  {name:"divingontario.com", slug:"divingontario", price:1500, priceStr:"$1,500", color:"#06b6d4", type:"Geo-Niche", chars:16, keywords:2, link:"https://checkoutlink.godaddy.com/34c30a31-5b8e-4487-9392-b321460c9568"},
+  {name:"santof.com", slug:"santof", price:1800, priceStr:"$1,800", color:"#8b5cf6", type:"Brandable", chars:6, keywords:0, link:"https://checkoutlink.godaddy.com/c2a02ed2-b1e6-42df-b01d-7424e6254bbb"},
+  {name:"iddic.com", slug:"iddic", price:2000, priceStr:"$2,000", color:"#3b82f6", type:"Brandable", chars:5, keywords:1, link:"https://checkoutlink.godaddy.com/2daaee62-7338-467f-9e6a-f24647e0fda1"},
+  {name:"cvcas.com", slug:"cvcas", price:0, priceStr:"—", color:"#3b82f6", type:"Brandable", chars:5, keywords:1, link:"#"},
+  {name:"PromptBootAI.com", slug:"promptbootai", price:3000, priceStr:"$3,000", color:"#f59e0b", type:"AI/Trending", chars:14, keywords:3, link:"https://checkoutlink.godaddy.com/ad50fec7-1499-465b-8456-2f87aba6baa7"},
+  {name:"Hetod.com", slug:"hetod", price:10000, priceStr:"$10,000", color:"#ef4444", type:"Premium", chars:5, keywords:0, link:"https://checkoutlink.godaddy.com/ce9b6d9a-3337-40f2-8392-e31eeb2cabf2"}
 ];
 
-let log = '';
-function addLog(msg) {
-  log += new Date().toLocaleTimeString() + ' → ' + msg + '\n';
-  document.getElementById('statusLog').textContent = log;
+// Price chart
+const maxP = Math.max(...domains.map(d=>d.price));
+document.getElementById('priceChart').innerHTML = domains.filter(d=>d.price>0).map(d => {
+  const h = Math.max(4,(d.price/maxP)*100);
+  return '<div class="bar-col"><div class="bar-value" style="color:'+d.color+'">$'+d.price.toLocaleString()+'</div><div class="bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="bar-label">'+d.slug+'</div></div>';
+}).join('');
+
+// Domain cards
+const score = d => Math.min(100, Math.max(20, 100 - (d.chars*3) + (d.keywords*15) + (d.price > 2000 ? 10 : 0)));
+document.getElementById('domainCards').innerHTML = domains.map(d => {
+  const s = score(d);
+  return '<div class="domain-card"><div class="d-header"><div class="d-name" style="color:'+d.color+'">'+d.name+'</div><div class="d-badges"><span class="d-price">'+d.priceStr+'</span><span class="d-type">'+d.type+'</span></div></div><div class="d-info"><div class="d-info-item"><div class="d-info-val">'+d.chars+'</div><div class="d-info-label">Chars</div></div><div class="d-info-item"><div class="d-info-val">'+d.keywords+'</div><div class="d-info-label">Keywords</div></div><div class="d-info-item"><div class="d-info-val">.COM</div><div class="d-info-label">TLD</div></div><div class="d-info-item"><div class="d-info-val" style="color:'+d.color+'">'+s+'/100</div><div class="d-info-label">Score</div></div></div>'+(d.link!=='#'?'<a class="d-link" href="'+d.link+'" target="_blank">View listing →</a>':'')+'</div>';
+}).join('');
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  event.target.classList.add('active');
 }
-
-async function tryFetch(endpoint) {
-  const url = 'https://' + GC + '/api/v0' + endpoint;
-  addLog('Fetching: ' + url);
-  try {
-    const resp = await fetch(url, {
-      headers: {
-        'Authorization': 'Bearer ' + TOKEN,
-        'Content-Type': 'application/json'
-      }
-    });
-    addLog('Response status: ' + resp.status);
-    if (!resp.ok) {
-      const errText = await resp.text();
-      addLog('Error body: ' + errText.substring(0, 200));
-      return null;
-    }
-    const data = await resp.json();
-    addLog('Success! Keys: ' + Object.keys(data).join(', '));
-    return data;
-  } catch(e) {
-    addLog('Error: ' + e.message);
-    return null;
-  }
-}
-
-async function fetchAllData() {
-  log = '';
-  document.getElementById('statusBadge').innerHTML = '<span class="loading-spin"></span> Fetching...';
-
-  let totalVisits = 0, totalBuyClicks = 0;
-  let dv = {}, dc = {}, dcc = {};
-  domains.forEach(d => { dv[d.slug] = 0; dc[d.slug] = 0; dcc[d.slug] = 0; });
-
-  // Try /me first to verify token
-  addLog('--- Verifying token ---');
-  const me = await tryFetch('/me');
-
-  // Try /stats/total
-  addLog('--- Fetching total stats ---');
-  const total = await tryFetch('/stats/total');
-  if (total && total.count) {
-    totalVisits = total.count;
-    addLog('Total count: ' + total.count);
-  }
-
-  // Try /pages
-  addLog('--- Fetching pages ---');
-  const pages = await tryFetch('/pages?limit=100');
-  if (pages && pages.paths) {
-    addLog('Found ' + pages.paths.length + ' paths');
-    pages.paths.forEach(pg => {
-      const path = (pg.path || '').toLowerCase();
-      const count = pg.count || 0;
-      addLog('  Path: ' + path + ' = ' + count + ' visits');
-
-      domains.forEach(d => {
-        const s = d.slug.toLowerCase();
-        if (path.includes('buy-click-' + s)) {
-          dc[d.slug] += count;
-          totalBuyClicks += count;
-        } else if (path.includes('contact-click-' + s)) {
-          dcc[d.slug] += count;
-        } else if (path.includes(s) || path.includes(d.name.toLowerCase())) {
-          dv[d.slug] += count;
-        }
-      });
-    });
-  }
-
-  // Try /stats/hits if pages didn't work
-  if (!pages || !pages.paths) {
-    addLog('--- Trying /stats/hits ---');
-    const stats = await tryFetch('/stats/hits?limit=100');
-    if (stats && stats.hits) {
-      addLog('Found ' + stats.hits.length + ' hits');
-      stats.hits.forEach(hit => {
-        const path = (hit.path || '').toLowerCase();
-        const count = hit.count || 0;
-        addLog('  Hit: ' + path + ' = ' + count);
-
-        domains.forEach(d => {
-          const s = d.slug.toLowerCase();
-          if (path.includes('buy-click-' + s)) {
-            dc[d.slug] += count;
-            totalBuyClicks += count;
-          } else if (path.includes('contact-click-' + s)) {
-            dcc[d.slug] += count;
-          } else if (path.includes(s) || path.includes(d.name.toLowerCase())) {
-            dv[d.slug] += count;
-            if (!total) totalVisits += count;
-          }
-        });
-      });
-    }
-  }
-
-  // Update summary
-  document.getElementById('totalVisits').textContent = totalVisits.toLocaleString();
-  document.getElementById('totalClicks').textContent = totalBuyClicks.toLocaleString();
-  document.getElementById('convRate').textContent = totalVisits > 0 ? ((totalBuyClicks / totalVisits) * 100).toFixed(1) + '%' : '0%';
-
-  // Chart
-  const maxV = Math.max(...Object.values(dv), 1);
-  document.getElementById('visitsChart').innerHTML = domains.map(d => {
-    const v = dv[d.slug];
-    const h = Math.max(4, (v / maxV) * 100);
-    return '<div class="bar-col"><div class="bar-value" style="color:'+d.color+'">'+v+'</div><div class="bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="bar-label">'+d.slug+'</div></div>';
-  }).join('');
-
-  // Cards
-  document.getElementById('domainCards').innerHTML = domains.map(d => {
-    const v=dv[d.slug], b=dc[d.slug], co=dcc[d.slug];
-    const cr = v>0 ? ((b/v)*100).toFixed(1)+'%' : '0%';
-    return '<div class="domain-card"><div class="d-header"><div class="d-name" style="color:'+d.color+'">'+d.name+'</div><div class="d-badges"><span class="d-price">'+d.price+'</span><span class="d-type">'+d.type+'</span></div></div><div class="d-stats"><div class="d-stat"><div class="d-stat-value" style="color:var(--blue)">'+v+'</div><div class="d-stat-label">Visits</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--green)">'+b+'</div><div class="d-stat-label">Buy Clicks</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--amber)">'+co+'</div><div class="d-stat-label">Contact</div></div><div class="d-stat"><div class="d-stat-value" style="color:var(--cyan)">'+cr+'</div><div class="d-stat-label">Conv. Rate</div></div></div></div>';
-  }).join('');
-
-  document.getElementById('lastUpdate').textContent = 'Last update: ' + new Date().toLocaleTimeString();
-  document.getElementById('statusBadge').textContent = '● Live';
-  addLog('--- Done! ---');
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  fetchAllData();
-  setInterval(fetchAllData, 60000);
-});
 </script>
 </body>
 </html>
