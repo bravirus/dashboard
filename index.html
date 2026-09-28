@@ -139,7 +139,7 @@ function showDashboard(){
 async function fetchGC(ep){
   const t=getToken();if(!t)return null;
   try{
-    const r=await fetch('https://'+GC+'/api/v1'+ep,{headers:{'Authorization':'Bearer '+t,'Content-Type':'application/json'}});
+    const r=await fetch('https://'+GC+'/api/v0'+ep,{headers:{'Authorization':'Bearer '+t,'Content-Type':'application/json'}});
     if(!r.ok){if(r.status===403){alert('Token invalide!');disconnectToken()}return null}
     return await r.json();
   }catch(e){console.error(e);return null}
